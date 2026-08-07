@@ -61,7 +61,7 @@ export const updateUserProfile = async (req: AuthRequest, res: Response): Promis
 // GET /api/users/discover
 export const discoverUsers = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const currentUser = req.user?._id;
+    const currentUser = req.user!._id;
     const { country, state, gender, minAge, maxAge } = req.query;
 
     // Find all users the current user has already swiped on

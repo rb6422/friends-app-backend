@@ -6,7 +6,8 @@ import { AuthRequest } from '../middlewares/authMiddleware';
 // GET /api/chats
 export const getUserChats = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const chats = await Chat.find({ participants: { $in: [req.user?._id] } })
+    const userId = req.user!._id;
+    const chats = await Chat.find({ participants: { $in: [userId] } })
       .populate('participants', 'name profilePicture') // Get basic info of participants
       .sort({ updatedAt: -1 });
 
@@ -25,7 +26,8 @@ export const getChatMessages = async (req: AuthRequest, res: Response): Promise<
     const skip = (page - 1) * limit;
 
     // Verify if user is part of the chat
-    const chat = await Chat.findOne({ _id: chatId, participants: { $in: [req.user?._id] } });
+    const userId = req.user!._id;
+    const chat = await Chat.findOne({ _id: chatId, participants: { $in: [userId] } });
     if (!chat) {
       res.status(403).json({ message: 'Not authorized to view these messages' });
       return;
