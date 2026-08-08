@@ -10,7 +10,17 @@ const generateToken = (id: string) => {
 };
 
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.status(400).json({ message: 'Request body is missing. Send JSON with Content-Type: application/json' });
+    return;
+  }
+
   const { name, email, password, age, gender, country, state, bio } = req.body;
+
+  if (!name || !email || !password) {
+    res.status(400).json({ message: 'Name, email, and password are required' });
+    return;
+  }
 
   try {
     const userExists = await User.findOne({ email });
@@ -59,7 +69,17 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.status(400).json({ message: 'Request body is missing. Send JSON with Content-Type: application/json' });
+    return;
+  }
+
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({ message: 'Email and password are required' });
+    return;
+  }
 
   try {
     const user = await User.findOne({ email });
